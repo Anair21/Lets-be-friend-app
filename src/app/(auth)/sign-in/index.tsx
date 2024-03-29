@@ -1,4 +1,5 @@
 import SignInForm from "@/components/Auth/SignInForm";
+import WelcomeLogin from "@/components/shared/WelcomeLogin";
 import React from "react";
 import { View } from "react-native";
 
@@ -13,6 +14,7 @@ export default function Page() {
 function Content() {
   return (
     <View className=" w-full ">
+      <WelcomeLogin />
       <SignInForm />
     </View>
   );
