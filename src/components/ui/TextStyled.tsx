@@ -33,7 +33,7 @@ export const TextRegular = ({
   className,
 }: {
   children: any;
-  className: string;
+  className?: string;
 }) => {
   return (
     <Text className={className} style={{ fontFamily: "Montserrat-Regular" }}>
