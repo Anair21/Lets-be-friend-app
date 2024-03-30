@@ -1,3 +1,5 @@
+import { Account, Avatars, Client, Databases } from "appwrite";
+
 export const appwriteConfig = {
   // OTHER INTERFACE
 
@@ -48,3 +50,11 @@ export const appwriteConfig = {
   friendListCollectionId:
     process.env.EXPO_PUBLIC_APPWRITE_FRIEND_LIST_COLLECTION_ID,
 };
+
+export const client = new Client();
+
+client.setEndpoint(appwriteConfig.url).setProject(appwriteConfig.projectIdL);
+
+export const databases = new Databases(client);
+export const avatars = new Avatars(client);
+export const account = new Account(client);
