@@ -1,6 +1,9 @@
+import { useStorageState } from "@/lib/appStorage/useStorageState";
 import { getCurrentUser } from "@/lib/appwrite/api";
+import { account } from "@/lib/appwrite/appwriteConfig";
 import { IPlanNumber, IUser } from "@/types";
-import React, { createContext, useContext, useState } from "react";
+import { router } from "expo-router";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 export const INITIAL_USER: IUser = {
   id: "",
@@ -24,6 +27,10 @@ interface AuthContextType {
   checkAuthUser: () => Promise<boolean>;
   planCount: IPlanNumber;
   setPlanCount: React.Dispatch<React.SetStateAction<IPlanNumber>>;
+  signIn: (session?: any) => void;
+  signOut: () => void;
+  session?: string | null;
+  loadingStorage: boolean;
 }
 
 const INITIAL_STATE: AuthContextType = {
@@ -38,6 +45,10 @@ const INITIAL_STATE: AuthContextType = {
     limitedPlan: 0,
   },
   setPlanCount: () => {},
+  signIn: () => null,
+  signOut: () => null,
+  session: null,
+  loadingStorage: false,
 };
 
 const AuthContext = createContext<AuthContextType>(INITIAL_STATE);
@@ -45,6 +56,7 @@ const AuthContext = createContext<AuthContextType>(INITIAL_STATE);
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const [[loadingStorage, session], setSession] = useStorageState("session");
   const [user, setUser] = useState<IUser>(INITIAL_USER);
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -103,6 +115,18 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   //   checkAuthUser();
   // }, []);
 
+  useEffect(() => {
+    account
+      .get()
+      .then((res) => {
+        console.log(res);
+        console.log("succes");
+      })
+      .catch((err) => {
+        router.navigate("sign-in");
+      });
+  });
+
   const value = {
     user,
     setUser,
@@ -112,6 +136,18 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     checkAuthUser,
     planCount,
     setPlanCount,
+
+    // Setting sessioo
+
+    signIn: (session: any) => {
+      // Perform sign-in logic here
+      setSession(session);
+    },
+    signOut: () => {
+      setSession(null);
+    },
+    session,
+    loadingStorage,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

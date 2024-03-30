@@ -19,3 +19,15 @@ export async function getCurrentUser() {
     console.log(error);
   }
 }
+
+export async function SignInAccount(user: { email: string; password: string }) {
+  try {
+    const session = await account.createEmailSession(user.email, user.password);
+
+    if (!session) throw Error;
+
+    return session;
+  } catch (error) {
+    console.log(error);
+  }
+}

@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <View
       style={{ paddingTop: top }}
-      className="flex flex-row justify-between px-3 absolute top-0 left-0 w-full"
+      className="flex flex-row justify-between px-3 sticky top-0 left-0 w-full"
     >
       <Image
         className="fit"

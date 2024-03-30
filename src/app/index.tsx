@@ -27,6 +27,9 @@ const HomePage = () => {
     <View className=" flex-1 bg-bg">
       <Header />
       <Text>{appwriteConfig.url}</Text>
+      {/* <Pressable onPress={() => router.navigate("/sign-in")}>
+        <TextBold>Click me</TextBold>
+      </Pressable> */}
     </View>
   );
 };
