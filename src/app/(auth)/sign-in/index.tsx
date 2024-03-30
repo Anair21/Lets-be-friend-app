@@ -1,6 +1,7 @@
 import SignInForm from "@/components/Auth/SignInForm";
 import WelcomeLogin from "@/components/shared/WelcomeLogin";
 import { TextRegular } from "@/components/ui/TextStyled";
+import { useUserContext } from "@/context/AuthContext";
 import { Link } from "expo-router";
 import React from "react";
 import { View } from "react-native";
@@ -14,6 +15,10 @@ export default function Page() {
 }
 
 function Content() {
+  const { user } = useUserContext();
+
+  console.log(user.name);
+
   return (
     <View className=" w-full">
       <WelcomeLogin />

@@ -1,9 +1,12 @@
 import { Query } from "appwrite";
+import { router } from "expo-router";
 import { account, appwriteConfig, databases } from "./appwriteConfig";
 
 export async function getCurrentUser() {
   try {
-    const currentAccount = await account.get();
+    const currentAccount = await account
+      .get()
+      .catch(() => router.navigate("/sign-in"));
 
     if (!currentAccount) throw Error;
     const currentUser = await databases.listDocuments(
@@ -26,6 +29,15 @@ export async function SignInAccount(user: { email: string; password: string }) {
 
     if (!session) throw Error;
 
+    return session;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function signOutAccount() {
+  try {
+    const session = account.deleteSession("current");
     return session;
   } catch (error) {
     console.log(error);
