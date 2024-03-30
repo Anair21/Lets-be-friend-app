@@ -1,8 +1,15 @@
-import { Stack } from "expo-router";
-import React from "react";
+import { useUserContext } from "@/context/AuthContext";
+import { Stack, router } from "expo-router";
+import React, { useEffect } from "react";
 
 // Custom Layout component
 const Layout = ({ children }) => {
+  const { isAuthenticated } = useUserContext();
+
+  useEffect(() => {
+    if (isAuthenticated) router.replace("/");
+  }, []);
+
   return (
     <Stack
       initialRouteName="sign-in/index"

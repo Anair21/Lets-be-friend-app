@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/lib/appwrite/api";
+import { account } from "@/lib/appwrite/appwriteConfig";
 import { IPlanNumber, IUser } from "@/types";
 import { router } from "expo-router";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -59,9 +60,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const checkAuthUser = async () => {
     setIsLoading(true);
     try {
-      const currentAccount = await getCurrentUser().catch(() =>
-        router.navigate("/sign-in")
-      );
+      const currentAccount = await getCurrentUser();
 
       if (currentAccount) {
         setUser({
@@ -97,15 +96,15 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   useEffect(() => {
-    checkAuthUser();
+    account
+      .get()
+      .then(() => checkAuthUser())
+      .catch(() => router.navigate("/sign-in"));
   }, []);
 
   useEffect(() => {
-    if (!isAuthenticated && !isLoading) {
-      setUser(INITIAL_USER);
-      router.navigate("/sign-in");
-    }
-  }, [isAuthenticated]);
+    if (!isAuthenticated && !isLoading && !user) router.replace("/sign-in");
+  }, [!isAuthenticated]);
 
   const value = {
     user,
