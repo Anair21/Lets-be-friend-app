@@ -43,3 +43,36 @@ export async function signOutAccount() {
     console.log(error);
   }
 }
+
+// POSTS
+
+export async function getRecentInfinitePosts({
+  pageParam,
+}: {
+  pageParam: number;
+}) {
+  const queries: any[] = [
+    Query.orderDesc("$createdAt"),
+    Query.limit(10),
+    Query.isNotNull("creator"),
+    Query.select(["$createdAt", "$id", "*", "creator.*"]),
+  ];
+
+  if (pageParam) {
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      queries
+    );
+
+    if (!posts) throw Error;
+
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
+}

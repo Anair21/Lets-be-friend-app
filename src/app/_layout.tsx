@@ -1,5 +1,6 @@
 import { TextBold, TextMedium } from "@/components/ui/TextStyled";
 import AuthProvider from "@/context/AuthContext";
+import { QueryProvider } from "@/lib/react-query/QueryProvider";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import React, { useEffect } from "react";
@@ -45,12 +46,14 @@ export default function HomeLayout() {
   }
 
   return (
-    <AuthProvider>
-      <Layout>
-        <Stack.Screen name="index" options={{ animation: "none" }} />
-      </Layout>
-      <ToastLayoutConfig />
-    </AuthProvider>
+    <QueryProvider>
+      <AuthProvider>
+        <Layout>
+          <Stack.Screen name="index" options={{ animation: "none" }} />
+        </Layout>
+        <ToastLayoutConfig />
+      </AuthProvider>
+    </QueryProvider>
   );
 }
 
